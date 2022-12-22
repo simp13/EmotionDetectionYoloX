@@ -3,11 +3,12 @@ import random
 import sys
 from pathlib import Path
 
-if len(sys.argv) < 2:
+if len(sys.argv) < 3:
     print("no directory specified, please input target directory")
     exit()
 
 root_path = sys.argv[1]
+dataset_type = sys.argv[2]
 
 xmlfilepath = root_path + 'VOC2007/Annotations/'
 os.mkdir(xmlfilepath)
@@ -34,36 +35,34 @@ if not os.path.exists(root_path):
 if not os.path.exists(txtsavepath):
     os.makedirs(txtsavepath)
 
-trainval_percent = 0.9
-train_percent = 0.8
+# trainval_percent = 0.9
+# train_percent = 0.8
 total_xml = os.listdir(xmlfilepath)
 num = len(total_xml)
 list = range(num)
-tv = int(num * trainval_percent)
-tr = int(tv * train_percent)
-trainval = random.sample(list, tv)
-train = random.sample(trainval, tr)
+# tv = int(num * trainval_percent)
+# tr = int(tv * train_percent)
+# trainval = random.sample(list, tv)
+# train = random.sample(trainval, tr)
 
-print("train and val size:", tv)
-print("train size:", tr)
+# print("train and val size:", tv)
+# print("train size:", tr)
 
-ftrainval = open(txtsavepath + '/trainval.txt', 'w')
 ftest = open(txtsavepath + '/test.txt', 'w')
 ftrain = open(txtsavepath + '/train.txt', 'w')
 fval = open(txtsavepath + '/val.txt', 'w')
 
 for i in list:
     name = total_xml[i][:-4] + '\n'
-    if i in trainval:
-        ftrainval.write(name)
-        if i in train:
-            ftrain.write(name)
-        else:
-            fval.write(name)
-    else:
+    if dataset_type.strip() == 'train':
+        # ftrainval.write(name)
+        # if i in train:
+        ftrain.write(name)
+    elif dataset_type.strip() == 'val':
+        fval.write(name)
+    elif dataset_type.strip() == 'test':
         ftest.write(name)
 
-ftrainval.close()
 ftrain.close()
 fval.close()
 ftest.close()
