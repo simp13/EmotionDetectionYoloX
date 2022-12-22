@@ -52,22 +52,23 @@ print("Total Number: ",num)
 
 # print("train and val size:", tv)
 # print("train size:", tr)
-
+ftrainval = open(txtsavepath + '/trainval.txt', 'a')
 ftest = open(txtsavepath + '/test.txt', 'w')
 ftrain = open(txtsavepath + '/train.txt', 'w')
 fval = open(txtsavepath + '/val.txt', 'w')
 
 for i in list:
     name = total_xml[i][:-4] + '\n'
-    if dataset_type.strip() == 'train':
-        # ftrainval.write(name)
-        # if i in train:
-        ftrain.write(name)
-    elif dataset_type.strip() == 'val':
-        fval.write(name)
+    if dataset_type.strip() == 'train' or dataset_type.strip() == 'val':
+        ftrainval.write(name)
+        if dataset_type.strip() == 'train':
+            ftrain.write(name)
+        elif dataset_type.strip() == 'val':
+            fval.write(name)
     elif dataset_type.strip() == 'test':
         ftest.write(name)
 
+ftrainval.close()
 ftrain.close()
 fval.close()
 ftest.close()
