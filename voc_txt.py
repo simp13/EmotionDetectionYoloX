@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+import shutil
 from pathlib import Path
 
 if len(sys.argv) < 3:
@@ -9,11 +10,14 @@ if len(sys.argv) < 3:
 
 root_path = sys.argv[1]
 dataset_type = sys.argv[2]
+dataset_save_path = sys.argv[3]
 
-xmlfilepath = root_path + 'VOC2007/Annotations/'
-os.mkdir(xmlfilepath)
-imagefilepath = root_path + 'VOC2007/JPEGImages/'
-os.mkdir(imagefilepath)
+xmlfilepath = dataset_save_path + '/Annotations/'
+if not os.path.exists(xmlfilepath):
+    os.mkdir(xmlfilepath)
+imagefilepath = dataset_save_path + '/JPEGImages/'
+if not os.path.exists(imagefilepath):
+    os.mkdir(imagefilepath)
 
 # Move annotations to annotations folder
 for filename in os.listdir(root_path):
@@ -26,7 +30,7 @@ for filename in os.listdir(root_path):
             Path(root_path + filename).rename(imagefilepath + filename)
 
 
-txtsavepath = root_path + '/VOC2007/ImageSets/Main'
+txtsavepath = dataset_save_path + '/ImageSets/Main'
 
 if not os.path.exists(root_path):
     print("cannot find such directory: " + root_path)
@@ -40,6 +44,7 @@ if not os.path.exists(txtsavepath):
 total_xml = os.listdir(xmlfilepath)
 num = len(total_xml)
 list = range(num)
+print("Total Number: ",num)
 # tv = int(num * trainval_percent)
 # tr = int(tv * train_percent)
 # trainval = random.sample(list, tv)
